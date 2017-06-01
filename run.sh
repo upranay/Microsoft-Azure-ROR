@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 gem install rails bundler
 
 bundle install
