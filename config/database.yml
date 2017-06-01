@@ -5,9 +5,11 @@
 #   gem 'sqlite3'
 #
 default: &default
+  adapter: postgresql
   azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
 
 azure_dayplanner_db:
+  adapter: postgresql
   azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
   
 
