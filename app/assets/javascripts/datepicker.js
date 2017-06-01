@@ -31,7 +31,6 @@
         }
 
         updateDisplay(cur_date);
-
         $datepicker.on('click', '[data-toggle="calendar"]', function (event) {
             event.preventDefault();
             $datepicker.find('.input-datepicker').toggleClass('show-input');
@@ -64,19 +63,7 @@
             } else if (type == "subtract") {
                 cur_date = cur_date.subtract(date_type, amt);
             }
-
             updateDisplay(cur_date);
         });
-
-        // if ($datepicker.data('keyboard') == true) {
-            // $(window).on('keydown', function (event) {
-                // if (event.which == 37) {
-                    // $datepicker.find('span:eq(0)').trigger('click');
-                // } else if (event.which == 39) {
-                    // $datepicker.find('span:eq(1)').trigger('click');
-                // }
-            // });
-        // }
-
     });
 });

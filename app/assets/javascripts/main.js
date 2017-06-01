@@ -1,10 +1,8 @@
 var mapContainer;
 var meetingDate;
-
 var loc = "";
 var latitude = "";
 var longitude = "";
-
 var selected_start_time = "";
 var selected_end_time = "";
 
@@ -13,7 +11,6 @@ $(document).ready(function () {
     $("#saveengagement").click(function () {
         save_engagement();
     });
-
     $("#newEventModel").click(function () {
         reset_engangement();
     });
@@ -40,7 +37,6 @@ $(document).ready(function () {
                 if (selected_end_time <= selected_start_time) {
                     swal('Warning', 'Start time should be less than End time', 'warning');
                     $(".form_time[data-link-field='starttime-name'] .glyphicon-remove").click()
-
                 }
             }
         }
@@ -57,7 +53,6 @@ $(document).ready(function () {
             var min = $("#endtime-name").val().split(':')[1];
             var selected_end_time = new Date(year, month, day, hour, min)
         }
-
         // validate start time and end time
         if ($("#starttime-name").val().trim() != "" && $("#endtime-name").val().trim() != "") {
             if (selected_end_time <= selected_start_time) {
@@ -72,7 +67,7 @@ $(document).ready(function () {
         var places = new google.maps.places.Autocomplete(document.getElementById('location'));
         google.maps.event.addListener(places, 'place_changed', function () {
             var place = places.getPlace();
-            loc = place.formatted_address;
+            loc = $("#location").val();
             latitude = place.geometry.location.lat();
             longitude = place.geometry.location.lng();
         });
@@ -105,22 +100,18 @@ $(document).ready(function () {
 
     // set current date to meeting date datepicker
     $('.form_date').datetimepicker('setDate', new Date);
-
     $("#newEventModel").click(function (event) {
         event.stopPropagation();
         $("#myModal").modal('show');
         return false;
     });
-
     gMap.loadMap(document.getElementById('map'));
     mapContainer = $('#map');
-
     //setting today as current date in date picker
     var date = new Date();
     var today = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
     $("#date-input").val(today);
     $('.input-datepicker > .input-group-btn > button').click();
-
 });
 
 // Save new engagement to DB
@@ -129,9 +120,11 @@ function save_engagement() {
     var meeting_date = $("#meetingdate-name").val();
     var start_time = $("#starttime-name").val();
     var end_time = $("#endtime-name").val();
-
     if (title.trim() == "") {
         swal('Warning', 'Please enter title.', 'warning');
+    }
+	else if (loc.trim() != $("#location").val().trim() || latitude == "" || longitude == "") {
+        swal('Warning', 'Please select valid location.', 'warning');
     }
     else if (loc.trim() == "" && latitude.trim() == "" && longitude.trim() == "") {
         swal('Warning', 'Please select location.', 'warning');
@@ -174,13 +167,10 @@ function save_engagement() {
             success: function (data) {
                 $.unblockUI()
                 swal('Success', 'Engagement saved successfully.', 'success');
-
                 // reset map after saving new engagement
 				var dateArray = $('.date-picker').data('date').split("/");
                 var selectedMeetingdate = dateArray[2] + "-" + dateArray[0] + "-" + dateArray[1];
-
                 var newEngagementDate = meeting_date.split('-')[0] + "-" + meeting_date.split('-')[1] + "-" + meeting_date.split('-')[2];
-				
                 if (selectedMeetingdate == newEngagementDate) {
                     postgres.getAndSetMeetingLocationsData(selectedMeetingdate);
                 }
@@ -191,7 +181,6 @@ function save_engagement() {
             }
         });
     }
-
 }
 
 // Clear all control data
@@ -204,7 +193,6 @@ function reset_engangement() {
     selected_start_time = "";
     selected_end_time = "";
 }
-
 function initMap() {
 
 }
