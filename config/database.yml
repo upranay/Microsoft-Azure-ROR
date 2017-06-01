@@ -6,11 +6,13 @@
 #
 default: &default
   adapter: postgresql
-  azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
+  azure_db_url: postgres://postgres%40postgresql3jx7gzpurh7yi:pg%4012345@postgresql3jx7gzpurh7yi.postgres.database.azure.com:5432/dayplanner?sslmode=require
+  #azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
 
 azure_dayplanner_db:
   adapter: postgresql
-  azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
+  azure_db_url: postgres://postgres%40postgresql3jx7gzpurh7yi:pg%4012345@postgresql3jx7gzpurh7yi.postgres.database.azure.com:5432/dayplanner?sslmode=require
+  #azure_db_url: <%= ENV['POSTGRESQLCONNSTR_DefaultConnection'] %>
   
 
 # Warning: The database defined as "test" will be erased and
