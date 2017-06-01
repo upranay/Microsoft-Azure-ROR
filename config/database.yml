@@ -6,11 +6,11 @@
 #
 default: &default
   adapter: postgresql
-  azure_db_url: <%= ENV['POSTGRES'] %>
+  azure_db_url: <%= ENV['POSTGRES1'] %>
 
 azure_dayplanner_db:
   adapter: postgresql
-  azure_db_url: <%= ENV['POSTGRES'] %>
+  azure_db_url: <%= ENV['POSTGRES1'] %>
   
 
 # Warning: The database defined as "test" will be erased and
