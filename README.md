@@ -3,7 +3,7 @@
 ## Introduction
 Get hands-on and learn how to build and deploy PostgreSQL Database Services and Ruby on Rails application on Azure.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fkapilthakkar%2FMicrosoft-Azure-ROR%2Fmaster%2Fdeploy%2Ftemplate.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FKapilThakkar%2FMicrosoft-Azure-ROR%2Fmaster%2Ftemplate.json" target="_blank">
       <img src="http://azuredeploy.net/deploybutton.png"/>
  </a>
 
