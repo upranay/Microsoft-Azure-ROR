@@ -1,249 +1,123 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-  "parameters": {
-    "sites_ror_app_arm_name": {
-      "defaultValue": "ror-app-arm",
-      "type": "String"
+    "parameters": {},
+    "variables": {
+        "endpointName": "[concat('endpoint-', uniqueString(resourceGroup().id))]",
+        "serverFarmName": "ServerFarm1",
+        "profileName": "CdnProfile1",
+        "webAppName": "[concat('web-', uniqueString(resourceGroup().id))]",
+        "ruby-railsName": "[concat('ruby-rails', uniqueString(resourceGroup().id))]"
     },
-    "config_web_name": {
-      "defaultValue": "ror-app-arm/web",
-      "type": "String"
-    },
-    "sites_ror_app_arm_serverFarmId": {
-      "defaultValue": "/subscriptions/52f58736-332f-41c5-840a-93f42b9cae23/resourceGroups/app-ror/providers/Microsoft.Web/serverfarms/ServicePlanf0c93284-a1e3",
-      "type": "String"
-    },
-    "postgresServiceTier": {
-      "type": "string",
-      "defaultValue": "Basic",
-      "allowedValues": [
-        "Basic",
-        "Standard"
-      ],
-      "metadata": {
-        "description": "The pricing tier for the PostgreSQL service. Choose 'Basic' for workloads that scale with variable IOPS else 'Standard' for workloads that require on-demand scaling optimized for high throughput with provisioned IOPS."
-      }
-    },
-    "postgresComputeUnit": {
-      "type": "int",
-      "defaultValue": 50,
-      "allowedValues": [
-        50,
-        100,
-        200,
-        400,
-        800
-      ],
-      "metadata": {
-        "description": "The PostgreSQL database Compute Unit to use. For 'Basic' tier, expected values are 50 and 100. For 'Standard' tier, expected values are 100,200,400 and 800."
-      }
-    },
-    "postgresStorageGB": {
-      "type": "int",
-      "defaultValue": 50,
-      "metadata": {
-        "description": "The PostgreSQL database storage size to use. For 'Basic' tier, min value is 50 and max value is 1050 and for 'Standard' tier, min value is 125 and max value is 10000 (Can be increased by 125 GB)"
-      }
-    },
-    "postgresAdministratorLogin": {
-      "type": "string",
-      "metadata": {
-        "description": "The PostgreSQL database administrator username to use."
-      }
-    },
-    "postgresAdministratorPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "The PostgreSQL database administrator password to use. The password must contain character from three of the following categories � English uppercase letters, English lowercase letters, number (0-9), and non-alphanumeric characters (!, $, #, %)."
-      }
-    },
-    "postgresVersion": {
-      "type": "string",
-      "defaultValue": "9.6",
-      "allowedValues": [
-        "9.5",
-        "9.6"
-      ],
-      "metadata": {
-        "description": "The PostgreSQL version to use."
-      }
-    },
-    "postgresLocation": {
-      "type": "string",
-      "defaultValue": "West Europe",
-      "allowedValues": [
-        "East Asia",
-        "East US",
-        "East US 2",
-        "Japan East",
-        "Japan West",
-        "North Central US",
-        "North Europe",
-        "South Central US",
-        "Southeast Asia",
-        "West Europe",
-        "West US"
-      ],
-      "metadata": {
-        "description": "The PostgreSQL server location to use."
-      }
-    }
-    
-  },
-    "variables": {},
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/52f58736-332f-41c5-840a-93f42b9cae23/resourceGroups/ror-app-arm/providers/Microsoft.Web/sites/ror-app-arm'.",
-            "type": "Microsoft.Web/sites",
-            "kind": "app",
-            "name": "[parameters('sites_ror_app_arm_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "West Europe",
+            "name": "[variables('serverFarmName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-03-01",
             "tags": {
-                "hidden-related:/subscriptions/52f58736-332f-41c5-840a-93f42b9cae23/resourcegroups/app-ror/providers/Microsoft.Web/serverfarms/ServicePlanf0c93284-a1e3": "empty"
+                "displayName": "[variables('serverFarmName')]"
             },
-            "scale": null,
+            "sku": {
+                "name": "F1",
+                "capacity": 1
+            },
             "properties": {
-                "name": "[parameters('sites_ror_app_arm_name')]",
-                "hostNames": [
-                    "ror-app-arm.azurewebsites.net"
-                ],
-                "enabledHostNames": [
-                    "ror-app-arm.azurewebsites.net",
-                    "ror-app-arm.scm.azurewebsites.net"
-                ],
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_ror_app_arm_name'),'.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    },
-                    {
-                        "name": "[concat(parameters('sites_ror_app_arm_name'),'.scm.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    }
-                ],
-                "serverFarmId": "[parameters('sites_ror_app_arm_serverFarmId')]"
-            },
-            "dependsOn": []
+                "name": "[variables('serverFarmName')]"
+            }
         },
         {
-            "comments": "Generalized from resource: '/subscriptions/52f58736-332f-41c5-840a-93f42b9cae23/resourceGroups/ror-app-arm/providers/Microsoft.Web/sites/ror-app-arm/config/web'.",
-            "type": "Microsoft.Web/sites/config",
-            "name": "[parameters('config_web_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "West Europe",
-            "tags": {
-                "hidden-related:/subscriptions/52f58736-332f-41c5-840a-93f42b9cae23/resourcegroups/app-ror/providers/Microsoft.Web/serverfarms/ServicePlanf0c93284-a1e3": "empty"
-            },
-            "scale": null,
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "phpVersion": "",
-                "pythonVersion": "",
-                "nodeVersion": "",
-                "linuxFxVersion": "DOCKER|KAPILTHAKKAR/AZURE-RAILS",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2012",
-                "httpLoggingEnabled": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$ror-app-arm",
-                "publishingPassword": null,
-                "appSettings": null,
-                "metadata": null,
-                "connectionStrings": null,
-                "machineKey": null,
-                "handlerMappings": null,
-                "documentRoot": null,
-                "scmType": "None",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "javaVersion": null,
-                "javaContainer": null,
-                "javaContainerVersion": null,
-                "appCommandLine": "",
-                "managedPipelineMode": 0,
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false,
-                        "virtualDirectories": null
-                    }
-                ],
-                "winAuthAdminState": 0,
-                "winAuthTenantState": 0,
-                "customAppPoolIdentityAdminState": false,
-                "customAppPoolIdentityTenantState": false,
-                "runtimeADUser": null,
-                "runtimeADUserPassword": null,
-                "loadBalancing": 1,
-                "routingRules": [],
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "limits": null,
-                "autoHealEnabled": false,
-                "autoHealRules": {
-                    "triggers": null,
-                    "actions": null
-                },
-                "tracingOptions": null,
-                "vnetName": "",
-                "siteAuthEnabled": false,
-                "siteAuthSettings": {
-                    "enabled": null,
-                    "unauthenticatedClientAction": null,
-                    "tokenStoreEnabled": null,
-                    "allowedExternalRedirectUrls": null,
-                    "defaultProvider": null,
-                    "clientId": null,
-                    "clientSecret": null,
-                    "issuer": null,
-                    "allowedAudiences": null,
-                    "additionalLoginParams": null,
-                    "isAadAutoProvisioned": false,
-                    "googleClientId": null,
-                    "googleClientSecret": null,
-                    "googleOAuthScopes": null,
-                    "facebookAppId": null,
-                    "facebookAppSecret": null,
-                    "facebookOAuthScopes": null,
-                    "twitterConsumerKey": null,
-                    "twitterConsumerSecret": null,
-                    "microsoftAccountClientId": null,
-                    "microsoftAccountClientSecret": null,
-                    "microsoftAccountOAuthScopes": null
-                },
-                "cors": null,
-                "push": null,
-                "apiDefinition": null,
-                "autoSwapSlotName": null,
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": null
-            },
+            "name": "[variables('webAppName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-03-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_ror_app_arm_name'))]"
+                "[variables('serverFarmName')]"
+            ],
+            "tags": {
+                "displayName": "[variables('webAppName')]"
+            },
+            "properties": {
+                "name": "[variables('webAppName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]"
+            }
+        },
+        {
+            "name": "[variables('profileName')]",
+            "type": "Microsoft.Cdn/profiles",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-04-02",
+            "tags": {
+                "displayName": "[variables('profileName')]"
+            },
+            "sku": {
+                "name": "Standard_Akamai"
+            },
+            "properties": {},
+            "resources": [
+                {
+                    "name": "[variables('endpointName')]",
+                    "type": "endpoints",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2016-04-02",
+                    "dependsOn": [
+                        "[variables('profileName')]",
+                        "[variables('webAppName')]"
+                    ],
+                    "tags": {
+                        "displayName": "[variables('endpointName')]"
+                    },
+                    "properties": {
+                        "originHostHeader": "[reference(variables('webAppName')).hostNames[0]]",
+                        "isHttpAllowed": true,
+                        "isHttpsAllowed": true,
+                        "queryStringCachingBehavior": "IgnoreQueryString",
+                        "contentTypesToCompress": [
+                            "text/plain",
+                            "text/html",
+                            "text/css",
+                            "application/x-javascript",
+                            "text/javascript"
+                        ],
+                        "isCompressionEnabled": true,
+                        "origins": [
+                            {
+                                "name": "origin1",
+                                "properties": {
+                                    "hostName": "[reference(variables('webAppName')).hostNames[0]]"
+                                }
+                            }
+                        ]
+                    }
+                }
             ]
+        },
+        {
+            "name": "[variables('ruby-railsName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('[variables('serverFarmName')]Name'))]"
+            ],
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('[variables('serverFarmName')]Name'))]": "Resource",
+                "displayName": "ruby-rails"
+            },
+            "properties": {
+                "name": "[variables('ruby-railsName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('[variables('serverFarmName')]Name'))]"
+            }
         }
-    ]
+    ],
+    "outputs": {
+        "hostName": {
+            "type": "string",
+            "value": "[reference(variables('endpointName')).hostName]"
+        },
+        "originHostHeader": {
+            "type": "string",
+            "value": "[reference(variables('endpointName')).originHostHeader]"
+        }
+    }
 }
