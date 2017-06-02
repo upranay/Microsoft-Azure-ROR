@@ -2,14 +2,35 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "serverfarms_ServicePlan56f24d6a_95c9_name": {
-            "value": null
+        "name": {
+            "value": "c2c-appss"
         },
-        "sites_c2c_ror_name": {
-            "value": null
+        "dockerRegistryImageName": {
+            "value": "kapilthakkar/azure-rails"
         },
-        "config_web_name": {
-            "value": null
+        "hostingPlanName": {
+            "value": "ServicePlanfdd3075d-aa5f"
+        },
+        "hostingEnvironment": {
+            "value": ""
+        },
+        "location": {
+            "value": "West Europe"
+        },
+        "sku": {
+            "value": "Standard"
+        },
+        "workerSize": {
+            "value": "0"
+        },
+        "serverFarmResourceGroup": {
+            "value": "c2c-appss"
+        },
+        "skuCode": {
+            "value": "S1"
+        },
+        "subscriptionId": {
+            "value": "efbaf842-f428-4020-8718-9e3a642fa2c6"
         }
     }
 }
